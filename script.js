@@ -25,11 +25,26 @@ const CONFIG = {
   factSheetUrl: "what-to-expect.html",
 
   services: {
-    epc: { label: "EPC", basePrice: 65, perBedroom: 8 },
+    // Real prices, confirmed by the business owner 2026-09-15. Tiered by property type +
+    // bedroom count rather than a formula — each array is checked in order, first tier whose
+    // maxBeds is >= the entered bedroom count wins (Infinity = "this bed count and above").
+    epc: {
+      label: "EPC",
+      pricingTiers: {
+        flat: [{ maxBeds: Infinity, price: 55 }],
+        terraced: [{ maxBeds: 3, price: 60 }, { maxBeds: Infinity, price: 75 }],
+        semi: [{ maxBeds: 3, price: 65 }, { maxBeds: 4, price: 80 }, { maxBeds: Infinity, price: 85 }],
+        detached: [{ maxBeds: 3, price: 65 }, { maxBeds: 4, price: 80 }, { maxBeds: Infinity, price: 85 }]
+      }
+    },
+    // TODO: replace these three with your real prices — still the invented placeholders from
+    // the rebuild, using the generic basePrice+perBedroom formula below (not real tiers yet).
     stockCondition: { label: "Stock Condition Survey", basePrice: 95, perBedroom: 12 },
     retrofit: { label: "Retrofit Assessment & Co-ordination", basePrice: 150, perBedroom: 18 },
     floorPlans: { label: "Floor Plans", basePrice: 55, perBedroom: 6 }
   },
+  // Only used by services still on the placeholder basePrice+perBedroom formula above (EPC has
+  // its own real per-type tiers and ignores this).
   propertyTypeMultiplier: { flat: 1, terraced: 1.05, semi: 1.12, detached: 1.25 },
 
   // Flat surcharge applied when the entered postcode's area letters don't
@@ -54,10 +69,18 @@ function postcodeArea(postcode) {
 
 function computeQuote({ service, propertyType, bedrooms, postcode }) {
   const svc = CONFIG.services[service] || CONFIG.services.epc;
-  const multiplier = CONFIG.propertyTypeMultiplier[propertyType] || 1;
-  const extraBedrooms = Math.max(0, Number(bedrooms) - 1);
+  const bedroomCount = Number(bedrooms);
 
-  let total = (svc.basePrice + svc.perBedroom * extraBedrooms) * multiplier;
+  let total;
+  if (svc.pricingTiers) {
+    const tiers = svc.pricingTiers[propertyType] || svc.pricingTiers.detached;
+    const tier = tiers.find((t) => bedroomCount <= t.maxBeds) || tiers[tiers.length - 1];
+    total = tier.price;
+  } else {
+    const multiplier = CONFIG.propertyTypeMultiplier[propertyType] || 1;
+    const extraBedrooms = Math.max(0, bedroomCount - 1);
+    total = (svc.basePrice + svc.perBedroom * extraBedrooms) * multiplier;
+  }
 
   const baseArea = postcodeArea(CONFIG.basePostcode);
   const enteredArea = postcodeArea(postcode);
