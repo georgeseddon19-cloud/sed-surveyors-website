@@ -18,11 +18,9 @@ const CONFIG = {
   // the visitor's email client with a pre-filled message instead.
   formspreeEndpoint: "https://formspree.io/f/YOUR_FORM_ID",
 
-  // TODO: Google Calendar → Create → Appointment schedule → set availability
-  // Mon–Fri 16:00–20:00 → Share → "Booking page" link. Paste it here (a bare
-  // URL, or a full <iframe ...> embed snippet — both are accepted).
-  // Leave blank to show the "we'll be in touch" fallback instead.
-  bookingEmbedUrl: "",
+  // Google Calendar Appointment Schedule — "Sed Surveyors Site Visits",
+  // Mon–Fri, 45-min slots. Verified live 2026-09-15.
+  bookingEmbedUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0q84TiXcWmV4MXsiWwzv892DfbFGqV_SSRMhGs9C5LvD2lIF56eVlnRWbT0MTWzJtfmWjqwh60",
 
   factSheetUrl: "what-to-expect.html",
 
