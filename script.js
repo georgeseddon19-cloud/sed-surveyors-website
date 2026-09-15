@@ -8,10 +8,9 @@ const CONFIG = {
   // simple travel-surcharge banding in the quote calculator below.
   basePostcode: "NG1 1AA",
 
-  // TODO: real contact details — also update them in index.html directly
-  // (hero card, contact list, footer, JSON-LD) since those are static text.
-  phone: "[YOUR PHONE NUMBER]",
-  email: "[YOUR EMAIL]",
+  // Also set directly in index.html (contact list, JSON-LD) since those are static text.
+  phone: "+44 7858 621101",
+  email: "sedsurveyors@gmail.com",
 
   // TODO: create a form at https://formspree.io, then paste its endpoint here.
   // Until this is a real endpoint, the enquiry form falls back to opening
@@ -37,9 +36,14 @@ const CONFIG = {
         detached: [{ maxBeds: 3, price: 65 }, { maxBeds: 4, price: 80 }, { maxBeds: Infinity, price: 85 }]
       }
     },
-    // TODO: replace these three with your real prices — still the invented placeholders from
-    // the rebuild, using the generic basePrice+perBedroom formula below (not real tiers yet).
-    stockCondition: { label: "Stock Condition Survey", basePrice: 95, perBedroom: 12 },
+    // Real prices, confirmed 2026-09-15 — bedroom count only, doesn't vary by property type
+    // (a flat array of tiers instead of EPC's per-property-type object of tiers).
+    stockCondition: {
+      label: "Stock Condition Survey",
+      pricingTiers: [{ maxBeds: 2, price: 45 }, { maxBeds: 3, price: 50 }, { maxBeds: Infinity, price: 60 }]
+    },
+    // TODO: replace these two with your real prices — still the invented placeholders from the
+    // rebuild, using the generic basePrice+perBedroom formula below (not real tiers yet).
     retrofit: { label: "Retrofit Assessment & Co-ordination", basePrice: 150, perBedroom: 18 },
     floorPlans: { label: "Floor Plans", basePrice: 55, perBedroom: 6 }
   },
@@ -73,7 +77,9 @@ function computeQuote({ service, propertyType, bedrooms, postcode }) {
 
   let total;
   if (svc.pricingTiers) {
-    const tiers = svc.pricingTiers[propertyType] || svc.pricingTiers.detached;
+    // Either a flat array of bedroom-only tiers (e.g. Stock Condition Survey), or an object of
+    // per-property-type tier arrays (e.g. EPC) — same {maxBeds, price} shape either way.
+    const tiers = Array.isArray(svc.pricingTiers) ? svc.pricingTiers : (svc.pricingTiers[propertyType] || svc.pricingTiers.detached);
     const tier = tiers.find((t) => bedroomCount <= t.maxBeds) || tiers[tiers.length - 1];
     total = tier.price;
   } else {
