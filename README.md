@@ -1,5 +1,11 @@
 # Sed Surveyors website
 
+**Live at:** https://georgeseddon19-cloud.github.io/sed-surveyors-website/
+(GitHub Pages, deployed from `master` — repo must stay public for Pages to
+serve on the free plan). Point the real `sedsurveyors.co.uk` domain here
+with a CNAME once it's bought, or move to Netlify — either works from this
+same repo.
+
 Static site — plain HTML/CSS/JS, no build step. Rebuilt 2026-09-15 after the
 original folder was lost in a Desktop reorg (see note at the bottom).
 
@@ -16,9 +22,8 @@ original folder was lost in a Desktop reorg (see note at the bottom).
 1. **Formspree** — create a form at formspree.io, paste the endpoint into
    `CONFIG.formspreeEndpoint` in `script.js`. Until this is real, the enquiry
    form falls back to opening the visitor's email client (mailto).
-2. **Booking calendar** — Google Calendar → Create → Appointment schedule →
-   set availability (e.g. Mon–Fri 16:00–20:00) → Share → copy the booking
-   page link → paste into `CONFIG.bookingEmbedUrl` in `script.js`.
+2. ~~**Booking calendar**~~ — done. Live "Sed Surveyors Site Visits" Google
+   Calendar Appointment Schedule wired into `CONFIG.bookingEmbedUrl`.
 3. **Contact details** — replace every `[YOUR ...]` placeholder in
    `index.html` (phone, email, address) and in `CONFIG` in `script.js`
    (`phone`, `email`, `basePostcode`).
@@ -33,8 +38,11 @@ original folder was lost in a Desktop reorg (see note at the bottom).
 7. **Structured data** — `index.html` `<script type="application/ld+json">`
    has bracketed placeholders (address, Google Business/Facebook/Instagram
    URLs, qualifications) — fill these in for local SEO.
-8. **Deploy** — not deployed anywhere yet. Simplest path: drag-and-drop the
-   whole folder onto Netlify, or push this repo and connect it there.
+8. ~~**Deploy**~~ — done, see "Live at" above.
+9. **Google Business Profile / reviews QR** — profile created but needs a
+   live website to finish verification (now available, see above). Once
+   verified/published, get the "get more reviews" short link from Business
+   Profile Manager and a QR code can be generated for business cards.
 
 ## Local preview
 No build step needed — just serve the folder statically, e.g.:
