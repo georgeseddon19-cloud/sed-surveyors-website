@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /what-to-expect.html
+
+Sitemap: https://sedsurveyors.co.uk/sitemap.xml
