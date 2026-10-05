@@ -4,9 +4,9 @@
 const CONFIG = {
   businessName: "Sed Surveyors",
 
-  // TODO: your real base postcode (surveyor's home base) — used for the
-  // simple travel-surcharge banding in the quote calculator below.
-  basePostcode: "NG1 1AA",
+  // Home coverage area: any postcode in this area (NG) has no travel charge. Outside it, the
+  // calculator flags that additional travel fees may apply (no fixed amount is added).
+  basePostcode: "NG",
 
   // Also set directly in index.html (contact list, JSON-LD) since those are static text.
   phone: "+44 7858 621101",
@@ -46,16 +46,12 @@ const CONFIG = {
     // rebuild, using the generic basePrice+perBedroom formula below (not real tiers yet).
     // Retrofit is priced per job — no online estimate; the calculator points people to email instead.
     retrofit: { label: "Retrofit Assessment & Co-ordination", quoteOnRequest: true },
-    floorPlans: { label: "Floor Plans", basePrice: 55, perBedroom: 6 }
+    floorPlans: { label: "Floor Plans", quoteOnRequest: true }
   },
   // Only used by services still on the placeholder basePrice+perBedroom formula above (EPC has
   // its own real per-type tiers and ignores this).
   propertyTypeMultiplier: { flat: 1, terraced: 1.05, semi: 1.12, detached: 1.25 },
 
-  // Flat surcharge applied when the entered postcode's area letters don't
-  // match the base postcode's area letters. Approximation only — swap for a
-  // real geocoding/distance API if you need accurate travel pricing.
-  travelSurchargeOutsideArea: 25
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -93,7 +89,6 @@ function computeQuote({ service, propertyType, bedrooms, postcode }) {
   const baseArea = postcodeArea(CONFIG.basePostcode);
   const enteredArea = postcodeArea(postcode);
   const travelApplied = enteredArea !== "" && enteredArea !== baseArea;
-  if (travelApplied) total += CONFIG.travelSurchargeOutsideArea;
 
   return { total: Math.round(total), travelApplied };
 }
@@ -113,10 +108,10 @@ function initCalculator() {
       postcode: postcodeEl.value
     });
     if (quoteOnRequest) {
-      amountEl.innerHTML = `Price on request <small><a href="mailto:${CONFIG.email}?subject=Retrofit%20quote%20request">email us for rates</a></small>`;
+      amountEl.innerHTML = `Price on request <small><a href="mailto:${CONFIG.email}?subject=${encodeURIComponent(CONFIG.services[serviceEl.value].label + " quote request")}">email us for rates</a></small>`;
       return;
     }
-    amountEl.innerHTML = `£${total} <small>estimated total${travelApplied ? " · incl. travel" : ""}</small>`;
+    amountEl.innerHTML = `£${total} <small>estimated total${travelApplied ? " · outside NG — additional travel fees may apply" : ""}</small>`;
   }
 
   [serviceEl, typeEl, bedroomsEl].forEach((el) => el.addEventListener("change", update));
