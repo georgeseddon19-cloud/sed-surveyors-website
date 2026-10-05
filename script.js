@@ -44,7 +44,8 @@ const CONFIG = {
     },
     // TODO: replace these two with your real prices — still the invented placeholders from the
     // rebuild, using the generic basePrice+perBedroom formula below (not real tiers yet).
-    retrofit: { label: "Retrofit Assessment & Co-ordination", basePrice: 150, perBedroom: 18 },
+    // Retrofit is priced per job — no online estimate; the calculator points people to email instead.
+    retrofit: { label: "Retrofit Assessment & Co-ordination", quoteOnRequest: true },
     floorPlans: { label: "Floor Plans", basePrice: 55, perBedroom: 6 }
   },
   // Only used by services still on the placeholder basePrice+perBedroom formula above (EPC has
@@ -73,6 +74,7 @@ function postcodeArea(postcode) {
 
 function computeQuote({ service, propertyType, bedrooms, postcode }) {
   const svc = CONFIG.services[service] || CONFIG.services.epc;
+  if (svc.quoteOnRequest) return { quoteOnRequest: true };
   const bedroomCount = Number(bedrooms);
 
   let total;
@@ -104,12 +106,16 @@ function initCalculator() {
   const amountEl = document.getElementById("calc-amount");
 
   function update() {
-    const { total, travelApplied } = computeQuote({
+    const { total, travelApplied, quoteOnRequest } = computeQuote({
       service: serviceEl.value,
       propertyType: typeEl.value,
       bedrooms: bedroomsEl.value,
       postcode: postcodeEl.value
     });
+    if (quoteOnRequest) {
+      amountEl.innerHTML = `Price on request <small><a href="mailto:${CONFIG.email}?subject=Retrofit%20quote%20request">email us for rates</a></small>`;
+      return;
+    }
     amountEl.innerHTML = `£${total} <small>estimated total${travelApplied ? " · incl. travel" : ""}</small>`;
   }
 
