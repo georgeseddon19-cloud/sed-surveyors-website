@@ -234,3 +234,7 @@ textarea { padding: 11px 12px; border: 1px solid var(--border); border-radius: 8
   .hero-cta-inner h1 { font-size: 1.6rem; }
   .hero-banner img { max-height: 280px; }
 }
+
+.review-cta { max-width: 560px; margin: 0 auto; text-align: center; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 24px; box-shadow: var(--shadow); }
+.review-cta-stars { font-size: 1.6rem; }
+.review-cta p { margin: 0 0 20px; }

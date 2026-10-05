@@ -23,6 +23,10 @@ const CONFIG = {
 
   factSheetUrl: "what-to-expect.html",
 
+  // Google "Ask for reviews" link from Business Profile (e.g. https://g.page/r/XXXX/review).
+  // Blank = the "Leave us a review" button emails feedback instead.
+  googleReviewUrl: "",
+
   services: {
     // Real prices, confirmed by the business owner 2026-09-15. Tiered by property type +
     // bedroom count rather than a formula — each array is checked in order, first tier whose
@@ -55,6 +59,12 @@ const CONFIG = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  const reviewLink = document.getElementById("review-link");
+  if (reviewLink && CONFIG.googleReviewUrl) {
+    reviewLink.href = CONFIG.googleReviewUrl;
+    reviewLink.target = "_blank";
+    reviewLink.rel = "noopener";
+  }
   document.getElementById("year").textContent = new Date().getFullYear();
   initCalculator();
   initEnquiryForm();
