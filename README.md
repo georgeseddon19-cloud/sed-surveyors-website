@@ -19,7 +19,7 @@ original folder was lost in a Desktop reorg (see note at the bottom).
 - `assets/` — icons and accreditation badge placeholders (SVG).
 
 ## Setup checklist (open placeholders)
-1. **Formspree** — create a form at formspree.io, paste the endpoint into
+1. ~~**Formspree**~~ — DONE (xljgerke). Was: create a form at formspree.io, paste the endpoint into
    `CONFIG.formspreeEndpoint` in `script.js`. Until this is real, the enquiry
    form falls back to opening the visitor's email client (mailto).
 2. ~~**Booking calendar**~~ — done. Live "Sed Surveyors Site Visits" Google

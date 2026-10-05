@@ -15,7 +15,7 @@ const CONFIG = {
   // TODO: create a form at https://formspree.io, then paste its endpoint here.
   // Until this is a real endpoint, the enquiry form falls back to opening
   // the visitor's email client with a pre-filled message instead.
-  formspreeEndpoint: "https://formspree.io/f/YOUR_FORM_ID",
+  formspreeEndpoint: "https://formspree.io/f/xljgerke",
 
   // Google Calendar Appointment Schedule — "Sed Surveyors Site Visits",
   // Mon–Fri, 45-min slots. Verified live 2026-09-15.
